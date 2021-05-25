@@ -29,6 +29,11 @@ variable "customer_id" {
   type        = string
 }
 
+variable "service_port" {
+  description = "Port serving client connections"
+  type        = number
+}
+
 variable "client_params" {
   description = "The client parameters to store"
   type = object({

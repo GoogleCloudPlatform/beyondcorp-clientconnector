@@ -36,10 +36,30 @@ resource "google_storage_bucket_object" "client_params" {
 
   # Params to be made available to OpenVPN client.
   content = jsonencode({
-    "remote_ipv4_addresses" = var.client_params.remote_ipv4_addresses,
-    "remote_ipv6_addresses" = var.client_params.remote_ipv6_addresses,
-    "ca_cert_pem"           = var.client_params.ca_cert_pem
-    "enable_split_tunnel"   = ! contains(var.client_params.private_subnets, "0.0.0.0/0")
-    "private_subnets"       = var.client_params.private_subnets
+    "connections" = [
+      for ip in setunion(
+        var.client_params.remote_ipv4_addresses,
+        var.client_params.remote_ipv6_addresses
+      ) :
+      {
+        "remote" = {
+          "address"  = ip
+          "port"     = var.service_port
+          "protocol" = "TCP"
+        }
+      }
+    ],
+    "routes" = [
+      for cidr in var.client_params.private_subnets :
+      {
+        "address" = cidrhost(cidr, 0)
+        "mask"    = cidrnetmask(cidr)
+      }
+    ],
+    "server_verification" = {
+      "ca" = {
+        "ca_pem" = [var.client_params.ca_cert_pem]
+      }
+    }
   })
 }

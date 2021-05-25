@@ -46,7 +46,7 @@ provider "tls" {}
 
 locals {
   # Naming prefix.
-  prefix = "bce-clientconnector-gateway"
+  prefix = "bce-clientconnector"
   # Port serving requests.
   service_port = 443
   # Tag to group gateway instances.
@@ -131,6 +131,7 @@ module "storage" {
   producer_project_id = local.producer_project_id
   prefix              = local.prefix
   customer_id         = var.customer_id
+  service_port        = local.service_port
   client_params = {
     remote_ipv4_addresses = module.lb.ipv4_addresses
     remote_ipv6_addresses = module.lb.ipv6_addresses
