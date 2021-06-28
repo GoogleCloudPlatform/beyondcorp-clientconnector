@@ -52,7 +52,7 @@ locals {
   # Tag to group gateway instances.
   gateway_ia_tag = "bce-clientconnector-gateway-ia"
   # Producer project
-  producer_project_id = "bce-clientconnector-preview"
+  producer_project_id = "bce-client-connector-preview"
 }
 
 ############################## API Enablement ##################################

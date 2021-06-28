@@ -37,14 +37,12 @@ write_files:
       Type=oneshot
       RemainAfterExit=true
       ExecStart=\
-      /sbin/iptables -t nat -I POSTROUTING -o eth0 -s 10.8.0.0/24 -j MASQUERADE ; \
+      /sbin/iptables -t nat -I POSTROUTING -o eth0 -s 100.89.24.0/25 -j MASQUERADE ; \
       /sbin/iptables -P FORWARD ACCEPT ; \
       /sbin/iptables -A INPUT -p tcp --dport 22 -j ACCEPT ; \
       /sbin/iptables -A INPUT -p tcp --dport 80 -j ACCEPT ; \
       /sbin/iptables -A INPUT -p tcp --dport 443 -j ACCEPT ;
   # Configures the Gateway (OpenVPN) server, running the docker image.
-  # TODO(shitijg): Update to the final way of fetching the docker image.
-  # Using a sample data plane image from a private repo for now.
   - path: /etc/systemd/system/gateway.service
     permissions: 0644
     owner: root
@@ -65,7 +63,7 @@ write_files:
         --net=host \
         --cap-add=NET_ADMIN \
         --device=/dev/net/tun \
-        gcr.io/nws-terraform-test/bce_connector_gw:latest ;
+        gcr.io/bce-client-connector-preview/gateway:latest ;
       ExecStop=/usr/bin/docker stop gatewayserver
       ExecStopPost=/usr/bin/docker rm gatewayserver
 

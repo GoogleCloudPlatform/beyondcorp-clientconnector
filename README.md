@@ -4,9 +4,14 @@ Google’s BeyondCorp Enterprise (BCE) Client Connector allows customers to secu
 non-http workloads resident in non-GCP environments. A common use case is to
 secure legacy client-server applications with context-aware checks.
 
+**Note:** The product is currently available as a Private Preview offering. You
+can reach out to your Account Team for gaining access.
+
 This document provides a step-by-step walk-through of deploying the gateway
-component responsible for tunneling the user traffic to the applications. The
-gateway comprises the following high-level resources:
+component responsible for tunneling the user traffic to the applications. Please
+refer to the user guide for setting up other components (ex. client).
+
+The gateway comprises the following high-level resources:
 
 -   Regional Managed Instance Groups (MIGs): deployed per-region as configured
     by the customer.
@@ -23,13 +28,17 @@ The solution uses Terraform to actuate the above resources.
 
 | Name                | Description                       | Default | Required |
 | ------------------- | --------------------------------- | :-----: | :------: |
-| credentials_file    | Key file of the service account used to authenticate   | n/a     | yes      |
+| credentials_file    | Key file of the service account   | n/a     | yes      |
+:                     : used to authenticate              :         :          :
 | project_id          | The project to deploy to          | n/a     | yes      |
 | vpc_network         | The VPC network to deploy to      | n/a     | yes      |
 | customer_id         | The Google Workspace customer id  | n/a     | yes      |
-| regions             | Configuration of regions to deploy to | n/a     | yes      |
-| dh_params_pem_file  | Diffie-Hellman parameters to configure server | n/a     | yes      |
-| private_subnets     | The destination subnets to tunnel traffic to | n/a     | yes      |
+| regions             | Configuration of regions to       | n/a     | yes      |
+:                     : deploy to                         :         :          :
+| dh_params_pem_file  | Diffie-Hellman parameters to      | n/a     | yes      |
+:                     : configure server                  :         :          :
+| private_subnets     | The destination subnets to tunnel | n/a     | yes      |
+:                     : traffic to                        :         :          :
 | enable_ipv6_clients | Enable traffic from IPv6 clients  | false   | no       |
 
 ## Prerequisites
@@ -63,19 +72,27 @@ connection. See [Prerequisites](#prerequisites).
 
     -   [Compute Engine API](https://console.cloud.google.com/apis/library/compute.googleapis.com)
     -   [Cloud Resource Manager API](https://console.cloud.google.com/apis/library/cloudresourcemanager.googleapis.com)
-    -   [IAM Service Account Credentials API](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com)
 
     ```
     gcloud services enable compute.googleapis.com
     gcloud services enable cloudresourcemanager.googleapis.com
-    gcloud services enable iamcredentials.googleapis.com
     ```
+
+1.  Get the
+    [default service account](https://cloud.google.com/compute/docs/access/service-accounts#default_service_account)
+    for your Compute Engine resources. This is automatically created when you
+    enable the Compute Engine API. You can find it under Credentials or your
+    project's IAM page in Cloud Console.
 
 1.  [Create a service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts#iam-service-accounts-create-gcloud).
     This is the account that will be used to authenticate with GCP when running
     the terraform script.
 
-1.  Assign Compute Admin IAM role to the service account.
+1.  Share the default Compute Engine and self-created service accounts with
+    Google for permission provisioning, according to the onboarding process
+    described in the user guide.
+
+1.  Assign Compute Admin IAM role to the created service account.
 
     ```
     gcloud projects add-iam-policy-binding PROJECT_ID \
@@ -83,9 +100,16 @@ connection. See [Prerequisites](#prerequisites).
     --role="roles/compute.admin"
     ```
 
-1.  Share the service account with Google for permission provisioning (for
-    storage in producer project), according to the process described in the user
-    guide.
+1.  Assign
+    [Service Account User](https://cloud.google.com/iam/docs/impersonating-service-accounts#iam-service-accounts-grant-role-sa-console)
+    role to the created service account on the Compute Engine default service
+    account.
+
+    ```
+    gcloud iam service-accounts add-iam-policy-binding PROJECT_NUMBER-compute@developer.gserviceaccount.com \
+    --member="serviceAccount:SERVICE_ACCOUNT_ID@PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/iam.serviceAccountUser"
+    ```
 
 1.  Generate the Diffie-Hellman key used to configure the server.
 
