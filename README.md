@@ -37,6 +37,8 @@ The solution uses Terraform to actuate the above resources.
 | private_subnets     | The destination subnets to tunnel traffic to | n/a     | yes      |
 | enable_ipv6_clients | Enable traffic from IPv6 clients  | false   | no       |
 
+**Note:** The customer id should be provided without the leading "C" (if present).
+
 ## Prerequisites
 
 -   Terraform version >= 0.13
