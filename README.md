@@ -28,14 +28,21 @@ The solution uses Terraform to actuate the above resources.
 
 | Name                | Description                       | Default | Required |
 | ------------------- | --------------------------------- | :-----: | :------: |
-| credentials_file    | Key file of the service account used to authenticate | n/a     | yes      |
+| credentials_file    | Key file of the service account   | n/a     | yes      |
+:                     : used to authenticate              :         :          :
 | project_id          | The project to deploy to          | n/a     | yes      |
 | vpc_network         | The VPC network to deploy to      | n/a     | yes      |
 | customer_id         | The Google Workspace customer id  | n/a     | yes      |
-| regions             | Configuration of regions to deploy to | n/a     | yes      |
-| dh_params_pem_file  | Diffie-Hellman parameters to configure server | n/a     | yes      |
-| private_subnets     | The destination subnets to tunnel traffic to | n/a     | yes      |
+| regions             | Configuration of regions to       | n/a     | yes      |
+:                     : deploy to                         :         :          :
+| dh_params_pem_file  | Diffie-Hellman parameters to      | n/a     | yes      |
+:                     : configure server                  :         :          :
+| private_subnets     | The destination subnets to tunnel | n/a     | yes      |
+:                     : traffic to                        :         :          :
 | enable_ipv6_clients | Enable traffic from IPv6 clients  | false   | no       |
+
+**Note:** The customer id should be provided without the leading "C" (if
+present).
 
 ## Prerequisites
 
