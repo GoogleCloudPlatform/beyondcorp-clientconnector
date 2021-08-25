@@ -35,7 +35,6 @@ The solution uses Terraform to actuate the above resources.
 | regions             | Configuration of regions to deploy to | n/a     | yes      |
 | dh_params_pem_file  | Diffie-Hellman parameters to configure server | n/a     | yes      |
 | private_subnets     | The destination subnets to tunnel traffic to | n/a     | yes      |
-| enable_ipv6_clients | Enable traffic from IPv6 clients  | false   | no       |
 
 **Note:** The customer id should be provided without the leading "C" (if present).
 

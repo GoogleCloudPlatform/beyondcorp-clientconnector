@@ -46,7 +46,9 @@ provider "tls" {}
 
 locals {
   # Naming prefix.
-  prefix = "bce-clientconnector"
+  prefix = "bce-cc"
+  # Long naming prefix.
+  long_prefix = "bce-clientconnector"
   # Port serving requests.
   service_port = 443
   # Tag to group gateway instances.
@@ -113,7 +115,7 @@ module "lb" {
   backend_ia_groups = [
     for value in values(module.mig.regional_migs) : value.instance_group
   ]
-  enable_ipv6_forwarding = var.enable_ipv6_clients
+  enable_ipv6_forwarding = false
 }
 
 ################################ Server Cert ###################################
@@ -129,7 +131,7 @@ module "certificate" {
 module "storage" {
   source              = "./modules/storage"
   producer_project_id = local.producer_project_id
-  prefix              = local.prefix
+  prefix              = local.long_prefix
   customer_id         = var.customer_id
   service_port        = local.service_port
   client_params = {

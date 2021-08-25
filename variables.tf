@@ -76,9 +76,3 @@ variable "dh_params_pem_file" {
   description = "PEM file containing the Diffie-Hellman parameters. Recommended key length is 2048 bits"
   type        = string
 }
-
-variable "enable_ipv6_clients" {
-  description = "Whether to allow connections from IPv6 enabled clients"
-  type        = bool
-  default     = false
-}

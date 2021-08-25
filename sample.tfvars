@@ -26,5 +26,3 @@ regions = {
 private_subnets = ["192.168.0.0/24", "192.168.1.0/24"]
 
 dh_params_pem_file = "path/to/dhparams.pem"
-
-enable_ipv6_clients = true
