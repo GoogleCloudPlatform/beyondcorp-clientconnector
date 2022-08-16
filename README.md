@@ -1,3 +1,5 @@
+#This project is no longer being maintained and is archived.
+
 # BeyondCorp Enterprise Client Connector Terraform Module
 
 Google’s BeyondCorp Enterprise (BCE) Client Connector allows customers to secure
